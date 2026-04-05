@@ -1,0 +1,212 @@
+/* =========================================
+   1. RESET & VARIABLES
+   ========================================= */
+:root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --danger: #ef4444;
+    --bg-body: #f8fafc;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --white: #ffffff;
+    --border: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+/* =========================================
+   2. AKSESIBILITAS (KRITERIA 4 ADVANCE)
+   ========================================= */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--primary);
+    color: white;
+    padding: 12px;
+    z-index: 9999;
+    text-decoration: none;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Kriteria 4: Hierarki Heading yang Jelas */
+h1 {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin: 1.5rem 0 1rem;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+/* =========================================
+   3. RESPONSIVE GRID (KRITERIA 4 SKILLED)
+   ========================================= */
+.responsive-grid {
+    display: grid;
+    gap: 24px;
+    padding: 20px 0;
+}
+
+/* Mobile: 375px */
+@media screen and (min-width: 375px) {
+    .responsive-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablet: 768px */
+@media screen and (min-width: 768px) {
+    .responsive-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop: 1024px */
+@media screen and (min-width: 1024px) {
+    .responsive-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* =========================================
+   4. FORM & INPUT DISABLED (REVISI REVIEWER)
+   ========================================= */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+/* Styling Khusus Input Disabled sesuai saran reviewer */
+input:disabled {
+    background-color: #f1f5f9; /* Abu-abu terang */
+    color: #64748b;           /* Teks redup */
+    border-color: #cbd5e1;
+    cursor: not-allowed;      /* Kursor tanda dilarang */
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 0.8rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+    background: var(--primary-hover);
+}
+
+/* =========================================
+   5. MAP & CARDS
+   ========================================= */
+#mainMap, #mapPicker {
+    height: 450px;
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    z-index: 1;
+}
+
+.story-card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.story-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Memberi jarak antar elemen teks */
+}
+
+.story-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.story-desc {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Membatasi deskripsi maksimal 3 baris agar rapi */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Navigation Helper */
+header {
+    background: var(--white);
+    padding: 1rem 5%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-main);
+    font-weight: 600;
+}
