@@ -10,16 +10,13 @@ const SavedPresenter = {
             </section>
         `;
     },
-
     async afterRender() {
         const stories = await StoryDB.getAll();
         const container = document.getElementById('savedList');
-        
         if (stories.length === 0) {
-            container.innerHTML = '<p>Belum ada bookmark yang disimpan.</p>';
+            container.innerHTML = '<p>Belum ada bookmark tersimpan.</p>';
             return;
         }
-
         container.innerHTML = '';
         stories.forEach(story => {
             container.innerHTML += `
@@ -27,22 +24,20 @@ const SavedPresenter = {
                     <img src="${story.photoUrl}" alt="${story.name}">
                     <div class="card-body">
                         <h3>${story.name}</h3>
-                        <button class="btn-delete" data-id="${story.id}" style="background:#ef4444; color:white; border:none; padding:8px 12px; border-radius:4px; cursor:pointer;">
+                        <button class="btn-delete" data-id="${story.id}" style="background:#ef4444; color:white; border:none; padding:8px; border-radius:4px; cursor:pointer;">
                             🗑️ Hapus Bookmark
                         </button>
                     </div>
                 </article>
             `;
         });
-
         container.querySelectorAll('.btn-delete').forEach(btn => {
             btn.addEventListener('click', async () => {
                 await StoryDB.delete(btn.dataset.id);
-                alert('Dihapus dari bookmark!');
+                alert('Berhasil dihapus!');
                 window.location.reload();
             });
         });
     }
 };
-
 export default SavedPresenter;

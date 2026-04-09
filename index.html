@@ -4,28 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Story App - Gani</title>
-    <link rel="manifest" href="./manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4f46e5">
-    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="./src/styles/style.css">
 </head>
 <body>
     <a href="#mainContent" class="skip-link">Skip to Content</a>
-
     <header id="mainHeader" style="display: none;">
         <nav>
             <div style="font-weight: bold; color: #4f46e5;">StoryApp</div>
             <ul class="nav-links">
                 <li><a href="#/">Beranda</a></li>
                 <li><a href="#/add">Tambah</a></li>
-                <li><a href="#" id="logoutBtn">Keluar</a></li>
+                <li><a href="#/saved">Simpan</a></li> <li><a href="#" id="logoutBtn">Keluar</a></li>
             </ul>
         </nav>
     </header>
-
     <main id="mainContent" tabindex="-1"></main>
-
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script type="module" src="./src/index.js"></script>
 </body>
