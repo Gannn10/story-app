@@ -2,24 +2,21 @@ import HomePresenter from '../presenters/home-presenter.js';
 import AddPresenter from '../presenters/add-presenter.js';
 import LoginPresenter from '../presenters/login-presenter.js';
 import RegisterPresenter from '../presenters/register-presenter.js';
+import SavedPresenter from '../presenters/saved-presenter.js'; // Import Presenter Baru
 
 const routes = {
     '/': HomePresenter,
     '/add': AddPresenter,
+    '/saved': SavedPresenter, // Tambahkan ini bre
     '/login': LoginPresenter,
     '/register': RegisterPresenter,
 };
 
 const Router = {
     async init() {
-      
-        window.addEventListener('hashchange', () => {
-            this._renderPage();
-        });
-
-        window.addEventListener('load', () => {
-            this._renderPage();
-        });
+        // Router.js kamu sudah bagus, panggil renderPage saat load & hashchange
+        window.addEventListener('hashchange', () => this._renderPage());
+        window.addEventListener('load', () => this._renderPage());
     },
 
     async _renderPage() {
@@ -28,38 +25,26 @@ const Router = {
         const container = document.querySelector('#mainContent');
         const header = document.querySelector('#mainHeader');
 
-        // 1. PROTEKSI RUTE (Kriteria 1 & 2)
-
         const publicPages = ['/login', '/register'];
         const isPublicPage = publicPages.includes(url);
 
         if (!token && !isPublicPage) {
-        
             window.location.hash = '#/login';
             return;
         }
 
-        // 2. MANAGEMENT UI (Header)
-       
-        if (isPublicPage) {
-            header.style.display = 'none';
-        } else {
-            header.style.display = 'block';
+        if (header) {
+            header.style.display = isPublicPage ? 'none' : 'block';
         }
 
-        // 3. SELEKSI PRESENTER
         const presenter = routes[url] || HomePresenter;
 
-        // 4. VIEW TRANSITION (Kriteria 1 Advance)
-       
         const render = async () => {
-           
             container.innerHTML = '<div class="loader-container"><p>Memuat Halaman...</p></div>';
-            
             try {
                 const html = await presenter.render();
                 container.innerHTML = html;
-                await presenter.afterRender();
+                if (presenter.afterRender) await presenter.afterRender();
             } catch (error) {
                 console.error('Render Error:', error);
                 container.innerHTML = '<p class="error">Terjadi kesalahan saat memuat halaman.</p>';
@@ -69,7 +54,6 @@ const Router = {
         if (document.startViewTransition) {
             document.startViewTransition(() => render());
         } else {
-
             await render();
         }
     }
