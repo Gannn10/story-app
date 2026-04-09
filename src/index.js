@@ -1,38 +1,31 @@
+// src/index.js
 import './styles/style.css';
 import Router from './routes/router.js';
 import NotificationHelper from './scripts/utils/notification-helper.js';
 
-window.addEventListener('load', async () => {
-    // 1. Jalankan Router
-    Router.init();
+// Jalankan render setiap ada perubahan URL
+window.addEventListener('hashchange', () => {
+    Router.renderPage();
+});
 
-    // 2. Registrasi Service Worker (WAJIB buat PWA & Mode Offline)
+window.addEventListener('load', async () => {
+    // 1. Render halaman pertama kali
+    Router.renderPage();
+
+    // 2. Service Worker
     if ('serviceWorker' in navigator) {
         try {
-            // Gunakan path relatif './sw.js' agar aman di GitHub Pages
             await navigator.serviceWorker.register('./sw.js');
-            console.log('Service Worker terdaftar!');
+            console.log('SW terdaftar!');
         } catch (error) {
-            console.error('Service Worker gagal daftar:', error);
+            console.error('SW gagal!', error);
         }
     }
 
-    // 3. Inisialisasi Push Notification (Kriteria Reviewer)
+    // 3. Notifikasi
     const token = localStorage.getItem('USER_TOKEN');
     if (token) {
-        // Minta izin dan Subscribe menggunakan VAPID Key Dicoding
         await NotificationHelper.requestPermission();
         await NotificationHelper.subscribePushNotification(token);
     }
 });
-
-// Logout Listener
-const logoutBtn = document.getElementById('logoutBtn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        localStorage.removeItem('USER_TOKEN');
-        window.location.hash = '#/login';
-        window.location.reload();
-    });
-}

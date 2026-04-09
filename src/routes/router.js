@@ -1,25 +1,21 @@
+// src/routes/router.js
 import HomePresenter from '../presenters/home-presenter.js';
 import AddPresenter from '../presenters/add-presenter.js';
 import LoginPresenter from '../presenters/login-presenter.js';
 import RegisterPresenter from '../presenters/register-presenter.js';
-import SavedPresenter from '../presenters/saved-presenter.js'; // Import Presenter Baru
+import SavedPresenter from '../presenters/saved-presenter.js';
 
 const routes = {
     '/': HomePresenter,
     '/add': AddPresenter,
-    '/saved': SavedPresenter, // Tambahkan ini bre
+    '/saved': SavedPresenter,
     '/login': LoginPresenter,
     '/register': RegisterPresenter,
 };
 
 const Router = {
-    async init() {
-        // Router.js kamu sudah bagus, panggil renderPage saat load & hashchange
-        window.addEventListener('hashchange', () => this._renderPage());
-        window.addEventListener('load', () => this._renderPage());
-    },
-
-    async _renderPage() {
+    // Kita hapus fungsi init() yang lama bre
+    async renderPage() {
         const url = window.location.hash.slice(1) || '/';
         const token = localStorage.getItem('USER_TOKEN');
         const container = document.querySelector('#mainContent');
@@ -28,6 +24,7 @@ const Router = {
         const publicPages = ['/login', '/register'];
         const isPublicPage = publicPages.includes(url);
 
+        // Proteksi Rute
         if (!token && !isPublicPage) {
             window.location.hash = '#/login';
             return;
@@ -47,7 +44,7 @@ const Router = {
                 if (presenter.afterRender) await presenter.afterRender();
             } catch (error) {
                 console.error('Render Error:', error);
-                container.innerHTML = '<p class="error">Terjadi kesalahan saat memuat halaman.</p>';
+                container.innerHTML = '<p class="error">Gagal memuat halaman.</p>';
             }
         };
 
