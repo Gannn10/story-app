@@ -1,4 +1,3 @@
-// src/presenters/home-presenter.js
 import StoryAPI from '../data/story-api.js';
 import StoryDB from '../scripts/data/db.js';
 
@@ -24,28 +23,52 @@ const HomePresenter = {
             const container = document.getElementById('storyList');
             container.innerHTML = '';
 
+            // Ambil data yang sudah ada di DB untuk cek status bookmark
+            const savedStories = await StoryDB.getAll();
+            const savedIds = savedStories.map((s) => s.id);
+
             listStory.forEach(story => {
                 if (story.lat && story.lon) {
                     L.marker([story.lat, story.lon]).addTo(map).bindPopup(`<b>${story.name}</b>`);
                 }
+
+                const isSaved = savedIds.includes(story.id);
 
                 container.innerHTML += `
                     <article class="story-card">
                         <img src="${story.photoUrl}" alt="${story.name}">
                         <div class="card-body">
                             <h3>${story.name}</h3>
-                            <p class="story-desc">${story.description.substring(0, 100)}...</p>
-                            <button class="btn-save" data-story='${JSON.stringify(story)}' style="background:none; border:none; font-size:1.5rem; cursor:pointer;" title="Simpan Offline">🔖</button>
+                            <p class="story-desc">${story.description.substring(0, 50)}...</p>
+                            <button class="btn-save ${isSaved ? 'active' : ''}" 
+                                    data-story='${JSON.stringify(story)}' 
+                                    title="Simpan Offline">
+                                🔖
+                            </button>
                         </div>
                     </article>
                 `;
             });
 
             container.querySelectorAll('.btn-save').forEach(btn => {
-                btn.addEventListener('click', async () => {
+                btn.addEventListener('click', async (e) => {
                     const story = JSON.parse(btn.dataset.story);
-                    await StoryDB.put(story);
-                    alert('Berhasil disimpan ke Bookmark!');
+                    
+                    // Efek animasi klik (scale up-down)
+                    btn.classList.add('animating');
+                    
+                    try {
+                        await StoryDB.put(story);
+                        btn.classList.add('active'); // Ubah warna jadi kuning
+                        
+                        // Opsional: Hilangkan alert agar tidak mengganggu flow
+                        console.log('Berhasil disimpan ke Bookmark!');
+                    } catch (err) {
+                        console.error(err);
+                    }
+
+                    // Hapus class animasi setelah selesai
+                    setTimeout(() => btn.classList.remove('animating'), 300);
                 });
             });
         } catch (err) {
