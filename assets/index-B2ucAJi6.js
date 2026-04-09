@@ -5,16 +5,20 @@
                 <h2>Cerita Terbaru</h2> 
                 <div id="storyList" class="responsive-grid"></div>
             </section>
-        `},async afterRender(){let e=localStorage.getItem(`USER_TOKEN`),n=L.map(`mainMap`).setView([-2.5489,118.0149],5);L.tileLayer(`https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`).addTo(n);try{let{listStory:r}=await t.getAllStories(e),i=document.getElementById(`storyList`);i.innerHTML=``,r.forEach(e=>{e.lat&&e.lon&&L.marker([e.lat,e.lon]).addTo(n).bindPopup(`<b>${e.name}</b>`),i.innerHTML+=`
+        `},async afterRender(){let e=localStorage.getItem(`USER_TOKEN`),n=L.map(`mainMap`).setView([-2.5489,118.0149],5);L.tileLayer(`https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`).addTo(n);try{let{listStory:r}=await t.getAllStories(e),i=document.getElementById(`storyList`);i.innerHTML=``;let a=(await N.getAll()).map(e=>e.id);r.forEach(e=>{e.lat&&e.lon&&L.marker([e.lat,e.lon]).addTo(n).bindPopup(`<b>${e.name}</b>`);let t=a.includes(e.id);i.innerHTML+=`
                     <article class="story-card">
                         <img src="${e.photoUrl}" alt="${e.name}">
                         <div class="card-body">
                             <h3>${e.name}</h3>
-                            <p class="story-desc">${e.description.substring(0,100)}...</p>
-                            <button class="btn-save" data-story='${JSON.stringify(e)}' style="background:none; border:none; font-size:1.5rem; cursor:pointer;" title="Simpan Offline">🔖</button>
+                            <p class="story-desc">${e.description.substring(0,50)}...</p>
+                            <button class="btn-save ${t?`active`:``}" 
+                                    data-story='${JSON.stringify(e)}' 
+                                    title="Simpan Offline">
+                                🔖
+                            </button>
                         </div>
                     </article>
-                `}),i.querySelectorAll(`.btn-save`).forEach(e=>{e.addEventListener(`click`,async()=>{let t=JSON.parse(e.dataset.story);await N.put(t),alert(`Berhasil disimpan ke Bookmark!`)})})}catch(e){console.error(e)}}},F={async render(){return`
+                `}),i.querySelectorAll(`.btn-save`).forEach(e=>{e.addEventListener(`click`,async t=>{let n=JSON.parse(e.dataset.story);e.classList.add(`animating`);try{await N.put(n),e.classList.add(`active`),console.log(`Berhasil disimpan ke Bookmark!`)}catch(e){console.error(e)}setTimeout(()=>e.classList.remove(`animating`),300)})})}catch(e){console.error(e)}}},F={async render(){return`
             <section class="add-container">
                 <h1>Tambah Cerita Baru</h1>
                 <form id="addStoryForm">
