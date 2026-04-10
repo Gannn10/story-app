@@ -5,8 +5,8 @@ const SavedPresenter = {
     async render() {
         return `
             <section class="home-container">
-                <h1>Bookmark Saya (Offline)</h1>
-                <div id="savedList" class="responsive-grid"></div>
+                <h1>Bookmark Saya</h1>
+                <h2>Daftar Cerita Tersimpan Offline</h2> <div id="savedList" class="responsive-grid"></div>
             </section>
         `;
     },
@@ -23,7 +23,7 @@ const SavedPresenter = {
                 <article class="story-card">
                     <img src="${story.photoUrl}" alt="${story.name}">
                     <div class="card-body">
-                        <h3>${story.name}</h3>
+                        <h1>${story.name}</h1>
                         <button class="btn-delete" data-id="${story.id}" style="background:#ef4444; color:white; border:none; padding:8px; border-radius:4px; cursor:pointer;">
                             🗑️ Hapus Bookmark
                         </button>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'story-app-v7'; 
+const CACHE_NAME = 'story-app-v8'; 
 const BASE_URL = '/story-app'; 
 
 const ASSETS_TO_CACHE = [
@@ -19,8 +19,20 @@ self.addEventListener('install', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      // Fallback ke index.html jika offline untuk mencegah "Dino"
       return response || fetch(event.request).catch(() => caches.match('index.html'));
     })
   );
+});
+
+// EVENT PUSH SESUAI REKOMENDASI REVIEWER
+self.addEventListener('push', (event) => {
+  console.log('Service worker pushing...');
+  async function chainPromise() {
+    const data = await event.data.json();
+    await self.registration.showNotification(data.title, {
+      body: data.options.body,
+      icon: 'favicon.svg', // Pakai aset yang tersedia di public
+    });
+  }
+  event.waitUntil(chainPromise());
 });
