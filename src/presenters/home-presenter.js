@@ -61,10 +61,12 @@ const HomePresenter = {
                         await StoryDB.put(story);
                         btn.classList.add('active'); // Ubah warna jadi kuning
                         
-                        // Opsional: Hilangkan alert agar tidak mengganggu flow
-                        console.log('Berhasil disimpan ke Bookmark!');
+                        // TAMBAHAN NOTIFIKASI BERHASIL
+                        alert('Berhasil disimpan ke Bookmark!'); 
+                        
                     } catch (err) {
-                        console.error(err);
+                        console.error('Gagal simpan:', err);
+                        alert('Gagal menyimpan cerita.');
                     }
 
                     // Hapus class animasi setelah selesai
