@@ -18,7 +18,7 @@
                             </button>
                         </div>
                     </article>
-                `}),i.querySelectorAll(`.btn-save`).forEach(e=>{e.addEventListener(`click`,async t=>{let n=JSON.parse(e.dataset.story);e.classList.add(`animating`);try{await N.put(n),e.classList.add(`active`),console.log(`Berhasil disimpan ke Bookmark!`)}catch(e){console.error(e)}setTimeout(()=>e.classList.remove(`animating`),300)})})}catch(e){console.error(e)}}},F={async render(){return`
+                `}),i.querySelectorAll(`.btn-save`).forEach(e=>{e.addEventListener(`click`,async t=>{let n=JSON.parse(e.dataset.story);e.classList.add(`animating`);try{await N.put(n),e.classList.add(`active`),alert(`Berhasil disimpan ke Bookmark!`)}catch(e){console.error(`Gagal simpan:`,e),alert(`Gagal menyimpan cerita.`)}setTimeout(()=>e.classList.remove(`animating`),300)})})}catch(e){console.error(e)}}},F={async render(){return`
             <section class="add-container">
                 <h1>Tambah Cerita Baru</h1>
                 <form id="addStoryForm">
