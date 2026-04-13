@@ -1,4 +1,4 @@
-const CACHE_NAME = 'story-app-v8'; 
+const CACHE_NAME = 'story-app-v9'; // Naikkan versi
 const BASE_URL = '/story-app'; 
 
 const ASSETS_TO_CACHE = [
@@ -24,14 +24,26 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// EVENT PUSH SESUAI REKOMENDASI REVIEWER
 self.addEventListener('push', (event) => {
   console.log('Service worker pushing...');
   async function chainPromise() {
-    const data = await event.data.json();
-    await self.registration.showNotification(data.title, {
-      body: data.options.body,
-      icon: 'favicon.svg', // Pakai aset yang tersedia di public
+    let data;
+    try {
+      // Coba parse sebagai JSON
+      data = await event.data.json();
+    } catch (error) {
+      // Jika kiriman berupa teks plain (seperti 'Test push...'), buat objek manual
+      data = {
+        title: 'Story App Notification',
+        options: {
+          body: event.data ? event.data.text() : 'Ada update terbaru!',
+        },
+      };
+    }
+
+    await self.registration.showNotification(data.title || 'Story App', {
+      body: data.options ? data.options.body : data.body,
+      icon: 'favicon.svg',
     });
   }
   event.waitUntil(chainPromise());
