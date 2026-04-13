@@ -26,6 +26,23 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide"
+    },
+    {
+      "src": "screenshots/mobile.png",
+      "sizes": "390x844",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tambah Cerita",
+      "url": "index.html#/add",
+      "icons": [
+        {
+          "src": "favicon.svg",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

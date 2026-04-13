@@ -23,7 +23,6 @@ const HomePresenter = {
             const container = document.getElementById('storyList');
             container.innerHTML = '';
 
-            // Ambil data yang sudah ada di DB untuk cek status bookmark
             const savedStories = await StoryDB.getAll();
             const savedIds = savedStories.map((s) => s.id);
 
@@ -33,17 +32,20 @@ const HomePresenter = {
                 }
 
                 const isSaved = savedIds.includes(story.id);
+                
+                // Format tanggal untuk memenuhi syarat minimal 3 data teks
+                const date = new Date(story.createdAt).toLocaleDateString('id-ID', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
 
                 container.innerHTML += `
                     <article class="story-card">
-                        <img src="${story.photoUrl}" alt="${story.name}">
+                        <img src="${story.photoUrl}" alt="Foto ${story.name}">
                         <div class="card-body">
-                            <h3>${story.name}</h3>
-                            <p class="story-desc">${story.description.substring(0, 50)}...</p>
-                            <button class="btn-save ${isSaved ? 'active' : ''}" 
+                            <h3>${story.name}</h3> <p class="story-date">Dibuat: ${date}</p> <p class="story-desc">${story.description.substring(0, 100)}...</p> <button class="btn-save ${isSaved ? 'active' : ''}" 
                                     data-story='${JSON.stringify(story)}' 
                                     title="Simpan Offline">
-                                🔖
+                                🔖 Simpan
                             </button>
                         </div>
                     </article>
@@ -53,23 +55,14 @@ const HomePresenter = {
             container.querySelectorAll('.btn-save').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const story = JSON.parse(btn.dataset.story);
-                    
-                    // Efek animasi klik (scale up-down)
                     btn.classList.add('animating');
-                    
                     try {
                         await StoryDB.put(story);
-                        btn.classList.add('active'); // Ubah warna jadi kuning
-                        
-                        // TAMBAHAN NOTIFIKASI BERHASIL
+                        btn.classList.add('active');
                         alert('Berhasil disimpan ke Bookmark!'); 
-                        
                     } catch (err) {
-                        console.error('Gagal simpan:', err);
                         alert('Gagal menyimpan cerita.');
                     }
-
-                    // Hapus class animasi setelah selesai
                     setTimeout(() => btn.classList.remove('animating'), 300);
                 });
             });
